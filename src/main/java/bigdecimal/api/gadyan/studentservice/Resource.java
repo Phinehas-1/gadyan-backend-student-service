@@ -2,6 +2,8 @@ package bigdecimal.api.gadyan.studentservice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,22 @@ public class Resource {
             return response;
         } catch (Exception e) {
             response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
+    }
+
+    @GetMapping("/getStudentByStudentId/{student_id}")
+    public ResponseEntity<? extends Object> getStudentByStudentId(@PathVariable("student_id") Long student_id) {
+        response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (student_id != null) {
+            try {
+                Student student = service.getStudentByStudentId(student_id);
+                response = new ResponseEntity<>(student, HttpStatus.FOUND);
+                return response;
+            } catch (Exception e) {
+                response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                return response;
+            }
         }
         return response;
     }

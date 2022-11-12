@@ -26,6 +26,19 @@ public class Service {
             throw new EntityNotSavedException(e);
         }
     }
+
+    public Student getStudentByStudentId(Long student_id) throws EntityNotFoundException {
+        Student student = new Student();
+        try {
+            StudentEntity entity = repo.findById(student_id).orElseThrow();
+            student.setStudent_batch_id(entity.getStudent_batch_id());
+            student.setStudent_id(entity.getStudent_id());
+            student.setStudent_name(entity.getStudent_name());
+            return student;
+        } catch (Exception e) {
+            throw new EntityNotFoundException(e);
+        }
+    }
 }
 
 @Entity
@@ -39,7 +52,14 @@ class StudentEntity {
 
 class EntityNotSavedException extends Exception {
     public EntityNotSavedException(Throwable t) {
-        super("This operation failed to save the entity.");
+        super("This operation failed to save the Student record.");
+        t.printStackTrace();
+    }
+}
+
+class EntityNotFoundException extends Exception {
+    public EntityNotFoundException(Throwable t) {
+        super("This operation could not find the Student record.");
         t.printStackTrace();
     }
 }
