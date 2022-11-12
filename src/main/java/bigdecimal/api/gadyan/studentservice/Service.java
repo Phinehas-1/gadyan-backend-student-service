@@ -1,5 +1,9 @@
 package bigdecimal.api.gadyan.studentservice;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -16,10 +20,15 @@ public class Service {
         this.repo = repo;
     }
 
+    /**
+     * @param student
+     * @throws EntityNotSavedException
+     */
     public void addStudent(Student student) throws EntityNotSavedException {
         StudentEntity entity = new StudentEntity();
         entity.setStudent_name(student.getStudent_name());
         entity.setStudent_batch_id(student.getStudent_batch_id());
+        // TODO check if the batch id exists on the batch service.
         try {
             repo.save(entity);
         } catch (Exception e) {
@@ -35,6 +44,24 @@ public class Service {
             student.setStudent_id(entity.getStudent_id());
             student.setStudent_name(entity.getStudent_name());
             return student;
+        } catch (Exception e) {
+            throw new EntityNotFoundException(e);
+        }
+    }
+
+    public List<Student> getStudentsByBatchId(Long batch_id) throws EntityNotFoundException {
+        Student student = new Student();
+        try {
+            Iterator<StudentEntity> entities = repo.findAll().iterator();
+            List<Student> students = new ArrayList<>();
+            while (entities.hasNext()) {
+                StudentEntity entity = entities.next();
+                student.setStudent_batch_id(entity.getStudent_batch_id());
+                student.setStudent_id(entity.getStudent_id());
+                student.setStudent_name(entity.getStudent_name());
+                students.add(student);
+            }
+            return students;
         } catch (Exception e) {
             throw new EntityNotFoundException(e);
         }
@@ -64,5 +91,5 @@ class EntityNotFoundException extends Exception {
     }
 }
 
-interface DAO extends CrudRepository<StudentEntity, Long>{  
+interface DAO extends CrudRepository<StudentEntity, Long> {
 }
