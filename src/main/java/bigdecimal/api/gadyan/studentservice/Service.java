@@ -38,6 +38,11 @@ public class Service {
         }
     }
 
+    /**
+     * @param student_id
+     * @return
+     * @throws EntityNotFoundException
+     */
     public Student getStudentByStudentId(Long student_id) throws EntityNotFoundException {
         Student student = new Student();
         try {
@@ -86,6 +91,18 @@ public class Service {
             throw new EntityNotFoundException(e);
         }
     }
+
+    public void updateStudent(Student student) throws EntityNotUpdatedException {
+        StudentEntity entity = new StudentEntity();
+        try {
+            entity = repo.findById(student.getStudent_id()).orElseThrow();
+            entity.setStudent_name(student.getStudent_name());
+            entity.setStudent_batch_id(student.getStudent_batch_id());
+            repo.save(entity);
+        } catch (Exception e) {
+            throw new EntityNotUpdatedException(e);
+        }
+    }
 }
 
 @Entity
@@ -107,6 +124,13 @@ class EntityNotSavedException extends Exception {
 class EntityNotFoundException extends Exception {
     public EntityNotFoundException(Throwable t) {
         super("This operation could not find the Student record.");
+        t.printStackTrace();
+    }
+}
+
+class EntityNotUpdatedException extends Exception {
+    public EntityNotUpdatedException(Throwable t) {
+        super("This operation could not update the Student record.");
         t.printStackTrace();
     }
 }
