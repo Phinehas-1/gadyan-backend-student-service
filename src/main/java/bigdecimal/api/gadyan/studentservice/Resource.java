@@ -72,4 +72,17 @@ public class Resource {
         }
         return response;
     }
+
+    @GetMapping("/getAllStudents")
+    public ResponseEntity<? extends Object> getAllStudents() {
+        response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            List<Student> students = service.getAllStudents();
+            response = new ResponseEntity<>(students, HttpStatus.FOUND);
+            return response;
+        } catch (Exception e) {
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return response;
+        }
+    }
 }

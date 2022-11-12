@@ -7,7 +7,9 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import bigdecimal.api.gadyan.studentservice.domain.Student;
 import lombok.Data;
@@ -52,6 +54,24 @@ public class Service {
     public List<Student> getStudentsByBatchId(Long batch_id) throws EntityNotFoundException {
         Student student = new Student();
         try {
+            Iterator<StudentEntity> entities = repo.findStudentsByBatchId(batch_id).iterator();
+            List<Student> students = new ArrayList<>();
+            while (entities.hasNext()) {
+                StudentEntity entity = entities.next();
+                student.setStudent_batch_id(entity.getStudent_batch_id());
+                student.setStudent_id(entity.getStudent_id());
+                student.setStudent_name(entity.getStudent_name());
+                students.add(student);
+            }
+            return students;
+        } catch (Exception e) {
+            throw new EntityNotFoundException(e);
+        }
+    }
+
+    public List<Student> getAllStudents() throws EntityNotFoundException {
+        Student student = new Student();
+        try {
             Iterator<StudentEntity> entities = repo.findAll().iterator();
             List<Student> students = new ArrayList<>();
             while (entities.hasNext()) {
@@ -92,4 +112,7 @@ class EntityNotFoundException extends Exception {
 }
 
 interface DAO extends CrudRepository<StudentEntity, Long> {
+
+    @Query(value = "select * from Student where batch_id = :batch_id", nativeQuery = true)
+    public List<StudentEntity> findStudentsByBatchId(@Param("batch_id") Long batch_id);
 }
