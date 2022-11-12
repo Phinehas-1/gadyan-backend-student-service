@@ -103,15 +103,30 @@ public class Service {
             throw new EntityNotUpdatedException(e);
         }
     }
-}
 
-@Entity
-@Data
-class StudentEntity {
-    @Id
-    private Long student_id;
-    private String student_name;
-    private Long student_batch_id;
+    public void deleteStudentByStudentId(Long student_id) throws EntityNotDeletedException {
+        try {
+            repo.deleteById(student_id);
+        } catch (Exception e) {
+            throw new EntityNotDeletedException(e);
+        }
+    }
+
+    public void deleteStudentsByBatchId(Long batch_id) throws EntityNotDeletedException {
+        try {
+            repo.deleteStudentsByBatchId(batch_id);
+        } catch (Exception e) {
+            throw new EntityNotDeletedException(e);
+        }
+    }
+
+    public void deleteAllStudents() throws EntityNotDeletedException {
+        try {
+            repo.deleteAll();
+        } catch (Exception e) {
+            throw new EntityNotDeletedException(e);
+        }
+    }
 }
 
 class EntityNotSavedException extends Exception {
@@ -135,8 +150,27 @@ class EntityNotUpdatedException extends Exception {
     }
 }
 
+class EntityNotDeletedException extends Exception {
+    public EntityNotDeletedException(Throwable t) {
+        super("This operation could not delete the Student record.");
+        t.printStackTrace();
+    }
+}
+
+@Entity
+@Data
+class StudentEntity {
+    @Id
+    private Long student_id;
+    private String student_name;
+    private Long student_batch_id;
+}
+
 interface DAO extends CrudRepository<StudentEntity, Long> {
 
     @Query(value = "select * from Student where batch_id = :batch_id", nativeQuery = true)
     public List<StudentEntity> findStudentsByBatchId(@Param("batch_id") Long batch_id);
+
+    @Query(value = "delete from Student where batch_id = :batch_id", nativeQuery = true)
+    public void deleteStudentsByBatchId(@Param("batch_id") Long batch_id);
 }
