@@ -5,7 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -159,8 +162,10 @@ class EntityNotDeletedException extends Exception {
 
 @Entity
 @Data
+@Table(name = "Student")
 class StudentEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long student_id;
     private String student_name;
     private Long student_batch_id;
@@ -168,9 +173,9 @@ class StudentEntity {
 
 interface DAO extends CrudRepository<StudentEntity, Long> {
 
-    @Query(value = "select * from Student where batch_id = :batch_id", nativeQuery = true)
+    @Query(value = "select * from Student where student_batch_id = :batch_id", nativeQuery = true)
     public List<StudentEntity> findStudentsByBatchId(@Param("batch_id") Long batch_id);
 
-    @Query(value = "delete from Student where batch_id = :batch_id", nativeQuery = true)
+    @Query(value = "delete from Student where student_batch_id = :batch_id", nativeQuery = true)
     public void deleteStudentsByBatchId(@Param("batch_id") Long batch_id);
 }

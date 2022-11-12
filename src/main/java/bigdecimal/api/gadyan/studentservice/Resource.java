@@ -26,6 +26,10 @@ public class Resource {
         this.service = service;
     }
 
+    /**
+     * @param student
+     * @return
+     */
     @PostMapping("/addStudent")
     public ResponseEntity<? extends Object> addStudent(@RequestBody Student student) {
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -43,6 +47,10 @@ public class Resource {
         return response;
     }
 
+    /**
+     * @param student_id
+     * @return
+     */
     @GetMapping("/getStudentByStudentId/{student_id}")
     public ResponseEntity<? extends Object> getStudentByStudentId(@PathVariable("student_id") Long student_id) {
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -59,6 +67,10 @@ public class Resource {
         return response;
     }
 
+    /**
+     * @param batch_id
+     * @return
+     */
     @GetMapping("/getStudentsByBatchId/{batch_id}")
     public ResponseEntity<? extends Object> getStudentsByBatchId(@PathVariable("batch_id") Long batch_id) {
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -75,6 +87,9 @@ public class Resource {
         return response;
     }
 
+    /**
+     * @return
+     */
     @GetMapping("/getAllStudents")
     public ResponseEntity<? extends Object> getAllStudents() {
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -88,6 +103,10 @@ public class Resource {
         }
     }
 
+    /**
+     * @param student
+     * @return
+     */
     @PutMapping("/updateStudent")
     public ResponseEntity<? extends Object> updateStudent(@RequestBody Student student) {
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -105,6 +124,10 @@ public class Resource {
         return response;
     }
 
+    /**
+     * @param student_id
+     * @return
+     */
     @DeleteMapping("/deleteStudentByStudentId/{student_id}")
     public ResponseEntity<? extends Object> deleteStudentByStudentId(@PathVariable("student_id") Long student_id) {
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -121,6 +144,10 @@ public class Resource {
         return response;
     }
 
+    /**
+     * @param batch_id
+     * @return
+     */
     @DeleteMapping("/deleteStudentsByBatchId/{batch_id}")
     public ResponseEntity<? extends Object> deleteStudentsByBatchId(@PathVariable("batch_id") Long batch_id) {
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -137,6 +164,9 @@ public class Resource {
         return response;
     }
 
+    /**
+     * @return
+     */
     @DeleteMapping("/deleteAllStudents")
     public ResponseEntity<? extends Object> deleteAllStudents() {
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
